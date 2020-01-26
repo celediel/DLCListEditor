@@ -1,0 +1,44 @@
+﻿<Window x:Class="DLCListEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DLCListEditor"
+        mc:Ignorable="d"
+        Title="GTA 5 dlclist.xml Creator/Editor" Height="550" Width="430">
+    <Window.Resources>
+        <ContextMenu x:Key="ColumnHeaderContextMenu">
+            <MenuItem x:Name="selectAllDlcList" Header="Select All" Click="selectAllDlcList_Click" IsEnabled="False" />
+        </ContextMenu>
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="ContextMenu" Value="{StaticResource ColumnHeaderContextMenu}" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Menu x:Name="TopMenu" Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem x:Name="SelectFolderMenuItem" Header="Select GTA V Folder" Click="SelectFolderMenuItem_Click" />
+                <Separator />
+                <MenuItem x:Name="NewDLCListItem" Header="Save to new dlclist.xml" Click="NewDLCListItem_Click" />
+                <MenuItem x:Name="OpenDLCListItem" Header="Open existing dlclist.xml" Click="OpenDLCListItem_Click" />
+                <Separator />
+                <MenuItem x:Name="CloseMenuItem" Header="Quit" Click="CloseMenuItem_Click" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem x:Name="AboutMenuItem" Header="About" Click="AboutMenuItem_Click" />
+            </MenuItem>
+        </Menu>
+        <DataGrid x:Name="dlcGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserReorderColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="nameColumn" Header="DLC Pack Name" IsReadOnly="True" Binding="{Binding ModName}" />
+                <DataGridCheckBoxColumn x:Name="vanillaDirColumn" Header="In Vanilla Dir?" IsReadOnly="True" Binding="{Binding InVanillaDir}" />
+                <DataGridCheckBoxColumn x:Name="modsDirColumn" Header="In Mods Dir?" IsReadOnly="True" Binding="{Binding InModsDir}" />
+                <DataGridCheckBoxColumn x:Name="dlcListColumn" Header="Write to dlclist.xml?" IsReadOnly="False" Binding="{Binding InDlcList}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

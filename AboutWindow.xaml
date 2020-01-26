@@ -1,0 +1,34 @@
+﻿<Window x:Class="DLCListEditor.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DLCListEditor"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterOwner"
+        Title="About this Application" Height="115" Width="385">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="13"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="10" TextBlock.TextAlignment="Center" VerticalAlignment="Center" Grid.Row="0">
+            <TextBlock>
+                Written by: <TextBlock x:Name="authorText">AUTHOR</TextBlock> -
+                <Hyperlink x:Name="emailLink" RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="mailto:email@dicks.com">
+                    <TextBlock x:Name="emailText">email@dicks.com</TextBlock>
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                Created with C# and Visual Studio -
+                <Hyperlink x:Name="sourceLink" RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://google.com/">Source Code</Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                This project is licensed under the GNU GPLv3 License.
+                <Hyperlink Click="Hyperlink_Click">Learn more</Hyperlink>.
+            </TextBlock>
+        </StackPanel>
+        <TextBlock Grid.Row="1" x:Name="versionText" FontSize="8" Text="v0.0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,2,0"/>
+    </Grid>
+</Window>
