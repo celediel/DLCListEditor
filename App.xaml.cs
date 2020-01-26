@@ -17,6 +17,6 @@ namespace DLCListEditor
         public static string AUTHOR = "celediel";
         public static string EMAIL = "celediel813@gmail.com";
         public static Uri EMAILINK = new Uri($"mailto:{EMAIL}");
-        public static Uri SOURCE = new Uri("https://google.com/");
+        public static Uri SOURCE = new Uri("https://gitlab.com/celediel/dlclisteditor");
     }
 }
