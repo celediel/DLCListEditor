@@ -3,9 +3,9 @@ using System.Linq;
 using System.Windows;
 using System.IO;
 using Microsoft.Win32;
-using System.Diagnostics;
 using System.Xml;
-using System.Xml.Serialization;
+//using CodeWalker.GameFiles;
+using System.Diagnostics;
 
 namespace DLCListEditor
 {
@@ -14,6 +14,7 @@ namespace DLCListEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string gta5executable;
         private string gta5Directory;
         private string modsDirectory;
         private string vanillaDirectory;
@@ -26,37 +27,31 @@ namespace DLCListEditor
         private XmlDocument xmlDocument;
         private XmlNode itemNode;
 
+        // these are the <Item>platform>/dlcPacks/whatever/</Item> entries
+        // I don't think they change so there's no reason not to hardcode them
         private string[] platforms = new string[]
         {
             "mpBeach", "mpBusiness", "mpChristmas", "mpValentines", "mpBusiness2", "mpHipster", "mpIndependence", "mpPilot", "spUpgrade", "mpLTS"
         };
+
+        //RpfFile updateRpf;
+
         public MainWindow()
         {
             InitializeComponent();
+            // disable saving from the start
+            CanUserSave(false);
+            //OpenFromRpfItem.IsEnabled = false;
+
+            // if the default Steam install directory exists, we'll use it
             if (Directory.Exists(defaultInstallLocation))
             {
-                isProcessed = ProcessGTAV(defaultInstallLocation + "GTA5.exe");
+                gta5executable = defaultInstallLocation + "GTA5.exe";
+                ProcessGTAV(gta5executable);
             }
         }
 
-        // lambda quit oh yeah
-        private void CloseMenuItem_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
-
-        private void SelectFolderMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFile = new OpenFileDialog
-            {
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = "GTA 5 Executable|GTA5.exe"
-            };
-            if (openFile.ShowDialog() == true)
-            {
-                isProcessed = ProcessGTAV(openFile.FileName);
-            }
-        }
-
-        private bool ProcessGTAV(string gtavExe)
+        private void ProcessGTAV(string gtavExe)
         {
             // Create a new Dict every time unless we've opened an existing list
             if (!existingList)
@@ -106,15 +101,6 @@ namespace DLCListEditor
 
             // now we have our dlcPacks dict populated!!!
 
-            //foreach (var item in dlcPacks)
-            //{
-            //    string output = item.Value.ModName;
-            //    if (item.Value.InVanillaDir)
-            //        output += " (VANILLA)";
-            //    if (item.Value.InModsDir)
-            //        output += " (MODS)";
-            //    Debug.WriteLine(output);
-            //}
             if (!existingList)
             {
                 foreach (var item in dlcPacks)
@@ -124,7 +110,44 @@ namespace DLCListEditor
             }
 
             dlcGrid.ItemsSource = dlcPacks.Values.ToList();
-            return true;
+            // If we've made it this far, all should be well
+            isProcessed = true;
+            CanUserSave(true);
+        }
+
+        private void CanUserSave(bool canSave)
+        {
+            if (canSave)
+            {
+                NewDLCListItem.IsEnabled = true;
+                //SaveToRpfITem.IsEnabled = true;
+                ClearMenuItem.IsEnabled = true;
+            }
+            else
+            {
+                NewDLCListItem.IsEnabled = false;
+                //SaveToRpfITem.IsEnabled = false;
+                ClearMenuItem.IsEnabled = false;
+            }
+        }
+
+        // lambda quit oh yeah
+        private void CloseMenuItem_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
+
+        private void SelectFolderMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Title = "Select GTA5.exe",
+                Filter = "GTA 5 Executable|GTA5.exe"
+            };
+            if (openFile.ShowDialog() == true)
+            {
+                gta5executable = openFile.FileName;
+                ProcessGTAV(gta5executable);
+            }
         }
 
         private void OpenDLCListItem_Click(object sender, RoutedEventArgs e)
@@ -140,37 +163,52 @@ namespace DLCListEditor
             if (openFileDialog.ShowDialog() == true)
             {
                 filename = openFileDialog.FileName;
-                xmlDocument = new XmlDocument();
-                xmlDocument.Load(filename);
 
                 string dlcName;
                 string[] wholePath;
-                if (!isProcessed)
+                if (isProcessed)
                 {
-                    dlcPacks = new Dictionary<string, DLCPack>();
-                }
-                else
-                {
-
+                    // if we've already selected the GTA5 directory, set InDlcList to false for
+                    // every existing dlcpack, so we can have a clean slate to load our XML into
                     foreach (var item in dlcPacks)
                     {
                         item.Value.InDlcList = false;
                     }
                 }
+                else
+                {
+                    // otherwise, we'll create a new list of the dlcpacks
+                    dlcPacks = new Dictionary<string, DLCPack>();
+                }
+
+                // now the actual XML work begins
+                xmlDocument = new XmlDocument();
+                xmlDocument.Load(filename);
+
+                // but let's check if it's even a good dlclist.xml
+                //if(xmlDocument.FirstChild.InnerXml)
+                if (xmlDocument.DocumentElement.Name != "SMandatoryPacksData")
+                {
+                    MessageBox.Show("This doesn't appear to be a valid dlclist.xml??", "Invalid!", MessageBoxButton.OK);
+                    return;
+                }
+
                 foreach (XmlNode xmlNode in xmlDocument.DocumentElement.ChildNodes[0].ChildNodes)
                 {
-                    //Debug.WriteLine(xmlNode.InnerText);
                     if (xmlNode.InnerText.Contains("/"))
                         dirSplit = '/';
                     wholePath = xmlNode.InnerText.Split(dirSplit);
+                    // if the path ends with / or \, the last value in the split array will be an empty string
                     if (wholePath.Length >= 2 && wholePath.Last() == "")
                     {
                         dlcName = wholePath[wholePath.Count() - 2];
                     }
+                    // if the path doesn't end with / or \, the last value will be what we want
                     else
                     {
                         dlcName = wholePath.Last();
                     }
+                    // ignore the <Item> tags with platform:/whatever in them
                     if (wholePath.First() != "platform:")
                     {
                         if (isProcessed)
@@ -181,14 +219,12 @@ namespace DLCListEditor
                             }
                             catch (KeyNotFoundException)
                             {
-                                dlcPacks.Add(dlcName, new DLCPack(dlcName, false, false));
-                                dlcPacks[dlcName].InDlcList = true;
+                                dlcPacks.Add(dlcName, new DLCPack(dlcName, false, false, true));
                             }
                         }
                         else
                         {
-                            dlcPacks.Add(dlcName, new DLCPack(dlcName, false, false));
-                            dlcPacks[dlcName].InDlcList = true;
+                            dlcPacks.Add(dlcName, new DLCPack(dlcName, false, false, true));
                         }
                     }
                 }
@@ -196,16 +232,13 @@ namespace DLCListEditor
                 MessageBox.Show($"Opened {filename}!");
                 dlcGrid.ItemsSource = dlcPacks.Values.ToList();
                 existingList = true;
+                CanUserSave(true);
             }
         }
 
         private void NewDLCListItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!isProcessed)
-            {
-                MessageBox.Show("Select the GTA5 first probably");
-            }
-            else
+            if (isProcessed)
             {
                 // do the stuff
                 string filename;
@@ -250,16 +283,44 @@ namespace DLCListEditor
                     MessageBox.Show($"{filename} written!");
                 }
             }
-        }
-
-        private void selectAllDlcList_Click(object sender, RoutedEventArgs e)
-        {
+            else
+            {
+                MessageBox.Show("Select the GTA5 first probably");
+            }
         }
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
             AboutWindow aboutWindow = new AboutWindow();
             aboutWindow.Show();
+        }
+
+        private void OpenFromRpfItem_Click(object sender, RoutedEventArgs e)
+        {
+            // todo
+        }
+
+        private void SaveToRpfITem_Click(object sender, RoutedEventArgs e)
+        {
+            // also todo
+        }
+
+        private void ClearMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            dlcPacks = new Dictionary<string, DLCPack>();
+            dlcGrid.ItemsSource = dlcPacks.Values.ToList();
+            existingList = false;
+            CanUserSave(false);
+            if (isProcessed)
+            {
+                MessageBoxResult result = MessageBox.Show("Reload same GTA5 directory?", "Alert!", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                    ProcessGTAV(gta5executable);
+            }
+            else
+            {
+                isProcessed = false;
+            }
         }
     }
 }

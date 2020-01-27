@@ -7,11 +7,10 @@
         mc:Ignorable="d"
         Title="GTA 5 dlclist.xml Creator/Editor" Height="550" Width="430">
     <Window.Resources>
-        <ContextMenu x:Key="ColumnHeaderContextMenu">
-            <MenuItem x:Name="selectAllDlcList" Header="Select All" Click="selectAllDlcList_Click" IsEnabled="False" />
-        </ContextMenu>
-        <Style TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="ContextMenu" Value="{StaticResource ColumnHeaderContextMenu}" />
+        <Style x:Key="DataGridCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="8,0,3,0" />
         </Style>
     </Window.Resources>
     <Grid>
@@ -23,21 +22,65 @@
             <MenuItem Header="_File">
                 <MenuItem x:Name="SelectFolderMenuItem" Header="Select GTA V Folder" Click="SelectFolderMenuItem_Click" />
                 <Separator />
-                <MenuItem x:Name="NewDLCListItem" Header="Save to new dlclist.xml" Click="NewDLCListItem_Click" />
-                <MenuItem x:Name="OpenDLCListItem" Header="Open existing dlclist.xml" Click="OpenDLCListItem_Click" />
+                <MenuItem x:Name="NewDLCListItem" Header="Save to new XML Document" Click="NewDLCListItem_Click" />
+                <MenuItem x:Name="OpenDLCListItem" Header="Open existing XML Document" Click="OpenDLCListItem_Click" />
+                <!--<Separator />
+                <MenuItem x:Name="OpenFromRpfItem" Header="Open dlclist.xml from RPF" Click="OpenFromRpfItem_Click" />
+                <MenuItem x:Name="SaveToRpfITem" Header="Save dlclist.xml to RPF" Click="SaveToRpfITem_Click" />-->
                 <Separator />
+                <MenuItem x:Name="ClearMenuItem" Header="Clear Current List" Click="ClearMenuItem_Click" />
                 <MenuItem x:Name="CloseMenuItem" Header="Quit" Click="CloseMenuItem_Click" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem x:Name="AboutMenuItem" Header="About" Click="AboutMenuItem_Click" />
             </MenuItem>
         </Menu>
-        <DataGrid x:Name="dlcGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserReorderColumns="False">
+        <DataGrid x:Name="dlcGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserReorderColumns="False" GridLinesVisibility="None"
+                  RowBackground="White" AlternatingRowBackground="GhostWhite">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="nameColumn" Header="DLC Pack Name" IsReadOnly="True" Binding="{Binding ModName}" />
-                <DataGridCheckBoxColumn x:Name="vanillaDirColumn" Header="In Vanilla Dir?" IsReadOnly="True" Binding="{Binding InVanillaDir}" />
-                <DataGridCheckBoxColumn x:Name="modsDirColumn" Header="In Mods Dir?" IsReadOnly="True" Binding="{Binding InModsDir}" />
-                <DataGridCheckBoxColumn x:Name="dlcListColumn" Header="Write to dlclist.xml?" IsReadOnly="False" Binding="{Binding InDlcList}" />
+                <!-- This is the vanilla directory column -->
+                <DataGridTextColumn x:Name="vanillaDirColumn" Header="In Vanilla Dir?" IsReadOnly="True" Binding="{Binding InVanillaDirYesNo}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=InVanillaDirYesNo}" Value="Yes">
+                                    <Setter Property="Background" Value="PaleGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=InVanillaDirYesNo}" Value="No">
+                                    <Setter Property="Background" Value="PeachPuff" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <!-- This is the mods dir column -->
+                <DataGridTextColumn x:Name="modsDirColumn" Header="In Mods Dir?" IsReadOnly="True" Binding="{Binding InModsDirYesNo}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=InModsDirYesNo}" Value="Yes">
+                                    <Setter Property="Background" Value="PaleGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=InModsDirYesNo}" Value="No">
+                                    <Setter Property="Background" Value="PeachPuff" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <!-- This is the DLC List Checkbox Column -->
+                <!--<DataGridCheckBoxColumn x:Name="dlcListColumn" Header="Write to dlclist.xml?" IsReadOnly="False" Binding="{Binding InDlcList}" />-->
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock>Write to dlclist.xml?</TextBlock>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox Style="{StaticResource DataGridCheckBoxStyle}" IsChecked="{Binding Path=InDlcList, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
