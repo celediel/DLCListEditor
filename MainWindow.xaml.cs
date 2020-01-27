@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System.Xml;
 //using CodeWalker.GameFiles;
 using System.Diagnostics;
+using System;
 
 namespace DLCListEditor
 {
@@ -321,6 +322,11 @@ namespace DLCListEditor
             {
                 isProcessed = false;
             }
+        }
+
+        private void ReadmeMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://gitlab.com/celediel/dlclisteditor/blob/master/README.md");
         }
     }
 }

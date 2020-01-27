@@ -32,6 +32,8 @@
                 <MenuItem x:Name="CloseMenuItem" Header="Quit" Click="CloseMenuItem_Click" />
             </MenuItem>
             <MenuItem Header="_Help">
+                <!--<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://gitlab.com/celediel/dlclisteditor/blob/master/README.md">View README</Hyperlink>-->
+                <MenuItem x:Name="ReadmeMenuItem" Header="View ReadMe" Click="ReadmeMenuItem_Click" />
                 <MenuItem x:Name="AboutMenuItem" Header="About" Click="AboutMenuItem_Click" />
             </MenuItem>
         </Menu>
