@@ -30,3 +30,4 @@ It's also possible to open and save existing XML files without loading your GTA5
 ## Changelog ##
 
 `1.0` - Initial release
+`1.01` - Added ReadMe redirection
