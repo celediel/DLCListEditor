@@ -8,7 +8,7 @@ namespace DLCListEditor
     /// </summary>
     public partial class App : Application
     {
-        public static double VERSION = 0.01;
+        public static double VERSION = 1.0;
         public static string AUTHOR = "celediel";
         public static string EMAIL = "celediel813@gmail.com";
         public static Uri EMAILINK = new Uri($"mailto:{EMAIL}");
