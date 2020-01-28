@@ -18,7 +18,7 @@ Once loaded, the screen, including the `Write to dlclist.xml?` column, will be u
 Loading another XML file will append it to your current list, rather than overwriting it.
 
 If you make some unwanted changes, or load a funky XML file, or just want to start over,
- `File -> Clear current list` will clear everything, and let you optionally rescan youor GTA directories.
+ `File -> Clear current list` will clear everything, and let you optionally rescan your GTA directories.
 
 It's also possible to open and save existing XML files without loading your GTA5 install.
 
