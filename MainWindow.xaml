@@ -10,23 +10,24 @@
         <Style x:Key="DataGridCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="8,0,3,0" />
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <!-- Menu bar -->
         <Menu x:Name="TopMenu" Grid.Row="0">
             <MenuItem Header="_File">
                 <MenuItem x:Name="SelectFolderMenuItem" Header="Select GTA V Folder" Click="SelectFolderMenuItem_Click" />
                 <Separator />
                 <MenuItem x:Name="NewDLCListItem" Header="Save to new XML Document" Click="NewDLCListItem_Click" />
                 <MenuItem x:Name="OpenDLCListItem" Header="Open existing XML Document" Click="OpenDLCListItem_Click" />
-                <!--<Separator />
+                <Separator />
+                <MenuItem x:Name="SaveToRpfITem" Header="Save dlclist.xml to RPF" Click="SaveToRpfITem_Click" />
                 <MenuItem x:Name="OpenFromRpfItem" Header="Open dlclist.xml from RPF" Click="OpenFromRpfItem_Click" />
-                <MenuItem x:Name="SaveToRpfITem" Header="Save dlclist.xml to RPF" Click="SaveToRpfITem_Click" />-->
                 <Separator />
                 <MenuItem x:Name="ClearMenuItem" Header="Clear Current List" Click="ClearMenuItem_Click" />
                 <MenuItem x:Name="CloseMenuItem" Header="Quit" Click="CloseMenuItem_Click" />
@@ -37,6 +38,7 @@
                 <MenuItem x:Name="AboutMenuItem" Header="About" Click="AboutMenuItem_Click" />
             </MenuItem>
         </Menu>
+        <!-- Actual data grid -->
         <DataGrid x:Name="dlcGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserReorderColumns="False" GridLinesVisibility="None"
                   RowBackground="White" AlternatingRowBackground="GhostWhite">
             <DataGrid.Columns>
@@ -55,6 +57,11 @@
                             </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="ToolTip" Value="Is this mod located in the vanilla GTA 5 folders?" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <!-- This is the mods dir column -->
                 <DataGridTextColumn x:Name="modsDirColumn" Header="In Mods Dir?" IsReadOnly="True" Binding="{Binding InModsDirYesNo}">
@@ -70,6 +77,11 @@
                             </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="ToolTip" Value="Is this mod located in GTA 5's mods directory?" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <!-- This is the DLC List Checkbox Column -->
                 <!--<DataGridCheckBoxColumn x:Name="dlcListColumn" Header="Write to dlclist.xml?" IsReadOnly="False" Binding="{Binding InDlcList}" />-->
@@ -82,8 +94,43 @@
                             <CheckBox Style="{StaticResource DataGridCheckBoxStyle}" IsChecked="{Binding Path=InDlcList, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="ToolTip" Value="Write this mode to generated XML files?" />
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <!-- Status Bar -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="statusBarGtavDir" Text="Currently loaded?"  Grid.Column="1" TextAlignment="Left" VerticalAlignment="Center">
+                <TextBlock.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" Text="Currently Loaded GTA Directory" />
+                            <TextBlock x:Name="statusBarGtavDirToolTip" Text="Currently loaded GTAV Directory" />
+                        </StackPanel>
+                    </ToolTip>
+                </TextBlock.ToolTip>
+            </TextBlock>
+            <TextBlock x:Name="statusBarLoadedXml" Text="Loaded XML File" Grid.Column="3" TextAlignment="Right" VerticalAlignment="Center">
+                <TextBlock.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" Text="Last Parsed XML File" />
+                            <TextBlock x:Name="statusBarLoadedXmlToolTip" Text="Last parsed XML file" />
+                        </StackPanel>
+                    </ToolTip>
+                </TextBlock.ToolTip>
+            </TextBlock>
+        </Grid>
     </Grid>
 </Window>

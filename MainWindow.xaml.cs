@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.IO;
-using Microsoft.Win32;
 using System.Xml;
-//using CodeWalker.GameFiles;
 using System.Diagnostics;
-using System;
+using Microsoft.Win32;
+//using CodeWalker.GameFiles;
+
+// <* <*> <+> <$> *** <| |> <|> !! || === ==> <<< >>> <> +++ <- -> => >> << >>= =<< .. ... :: -< >- -<< >>- ++ != /= == && ~> <~ ~@ www
+// {| |} {- -} [] ]# #[ ~= ~~ |- -| <$ $> 
 
 namespace DLCListEditor
 {
@@ -29,7 +32,7 @@ namespace DLCListEditor
         private XmlNode itemNode;
 
         // these are the <Item>platform>/dlcPacks/whatever/</Item> entries
-        // I don't think they change so there's no reason not to hardcode them
+        // I don't think they change so there's no reason not to hard code them
         private string[] platforms = new string[]
         {
             "mpBeach", "mpBusiness", "mpChristmas", "mpValentines", "mpBusiness2", "mpHipster", "mpIndependence", "mpPilot", "spUpgrade", "mpLTS"
@@ -42,7 +45,14 @@ namespace DLCListEditor
             InitializeComponent();
             // disable saving from the start
             CanUserSave(false);
-            //OpenFromRpfItem.IsEnabled = false;
+            OpenFromRpfItem.IsEnabled = false;
+            SaveToRpfITem.IsEnabled = false;
+
+            // default status bar
+            statusBarGtavDir.Text = "GTAV directory not selected";
+            statusBarGtavDirToolTip.Text = "GTAV directory not selected";
+            statusBarLoadedXml.Text = "";
+            statusBarLoadedXmlToolTip.Text = "No parsed XML file yet";
 
             // if the default Steam install directory exists, we'll use it
             if (Directory.Exists(defaultInstallLocation))
@@ -69,6 +79,7 @@ namespace DLCListEditor
                 foreach (string dir in Directory.GetDirectories(vanillaDirectory))
                 {
                     string name = dir.Split('\\').Last();
+                    // check if it already exists in the list, or add a new item
                     try
                     {
                         dlcPacks[name].InVanillaDir = true;
@@ -77,25 +88,24 @@ namespace DLCListEditor
                     {
                         dlcPacks.Add(name, new DLCPack(name, true, false));
                     }
-                    //Debug.WriteLine($"Found {name} in vanilla directory");
                 }
 
             }
 
+            // now we'll process the mods directory
             if (Directory.Exists(modsDirectory))
             {
                 foreach (var dir in Directory.GetDirectories(modsDirectory))
                 {
                     string name = dir.Split('\\').Last();
+                    // check if it already exists in the list, or add a new item
                     try
                     {
                         dlcPacks[name].InModsDir = true;
-                        //Debug.WriteLine($"Found {name} in both directories!");
                     }
                     catch (KeyNotFoundException)
                     {
                         dlcPacks.Add(name, new DLCPack(name, false, true));
-                        //Debug.WriteLine($"Found {name} in mods directory");
                     }
                 }
             }
@@ -111,6 +121,8 @@ namespace DLCListEditor
             }
 
             dlcGrid.ItemsSource = dlcPacks.Values.ToList();
+            statusBarGtavDir.Text = "GTAV directory loaded";
+            statusBarGtavDirToolTip.Text = gta5Directory;
             // If we've made it this far, all should be well
             isProcessed = true;
             CanUserSave(true);
@@ -127,7 +139,7 @@ namespace DLCListEditor
             else
             {
                 NewDLCListItem.IsEnabled = false;
-                //SaveToRpfITem.IsEnabled = false;
+                SaveToRpfITem.IsEnabled = false;
                 ClearMenuItem.IsEnabled = false;
             }
         }
@@ -232,6 +244,8 @@ namespace DLCListEditor
 
                 MessageBox.Show($"Opened {filename}!");
                 dlcGrid.ItemsSource = dlcPacks.Values.ToList();
+                statusBarLoadedXml.Text = filename.Split('\\').Last();
+                statusBarLoadedXmlToolTip.Text = filename;
                 existingList = true;
                 CanUserSave(true);
             }
@@ -308,10 +322,21 @@ namespace DLCListEditor
 
         private void ClearMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            // clear the dlcpacks list, and reset the datagrid
             dlcPacks = new Dictionary<string, DLCPack>();
             dlcGrid.ItemsSource = dlcPacks.Values.ToList();
+
+            // reset status bar
+            statusBarGtavDir.Text = "GTAV directory not selected";
+            statusBarGtavDirToolTip.Text = "GTAV directory not selected";
+            statusBarLoadedXml.Text = "";
+            statusBarLoadedXmlToolTip.Text = "No parsed XML file yet";
+
+            // reset variables
             existingList = false;
             CanUserSave(false);
+
+            // ask user if they want to reload GTA dir
             if (isProcessed)
             {
                 MessageBoxResult result = MessageBox.Show("Reload same GTA5 directory?", "Alert!", MessageBoxButton.YesNo);
