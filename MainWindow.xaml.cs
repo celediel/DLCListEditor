@@ -15,6 +15,7 @@ namespace DLCListEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        // I'm too lazy/dumb right now to make these not global
         private string gta5executable;
         private string gta5Directory;
         private string modsDirectory;
@@ -22,16 +23,6 @@ namespace DLCListEditor
         private Dictionary<string, DLCPack> dlcPacks;
         private bool isProcessed = false;
         private bool existingList = false;
-
-
-        // these are the <Item>platform>/dlcPacks/whatever/</Item> entries
-        // I don't think they change so there's no reason not to hard code them
-        private readonly string[] platforms = new string[]
-        {
-            "mpBeach", "mpBusiness", "mpChristmas", "mpValentines", "mpBusiness2", "mpHipster", "mpIndependence", "mpPilot", "spUpgrade", "mpLTS"
-        };
-
-        //RpfFile updateRpf;
 
         public MainWindow()
         {
@@ -253,6 +244,13 @@ namespace DLCListEditor
             XmlDocument xmlDocument;
             XmlNode itemNode;
 
+            // these are the <Item>platform>/dlcPacks/whatever/</Item> entries
+            // I don't think they change so there's no reason not to hard code them
+            string[] platforms = new string[]
+            {
+            "mpBeach", "mpBusiness", "mpChristmas", "mpValentines", "mpBusiness2", "mpHipster", "mpIndependence", "mpPilot", "spUpgrade", "mpLTS"
+            };
+
             if (isProcessed)
             {
                 // do the stuff
@@ -313,11 +311,15 @@ namespace DLCListEditor
         private void OpenFromRpfItem_Click(object sender, RoutedEventArgs e)
         {
             // todo
+            //RpfFile updateRpf;
+
         }
 
         private void SaveToRpfITem_Click(object sender, RoutedEventArgs e)
         {
             // also todo
+            //RpfFile updateRpf;
+
         }
 
         private void ClearMenuItem_Click(object sender, RoutedEventArgs e)
