@@ -20,17 +20,13 @@ namespace DLCListEditor
         private string modsDirectory;
         private string vanillaDirectory;
         private Dictionary<string, DLCPack> dlcPacks;
-        private readonly string defaultInstallLocation = "C:\\Program Files (x86)\\Steam\\SteamApps\\common\\Grand Theft Auto V\\";
         private bool isProcessed = false;
         private bool existingList = false;
-        private char dirSplit = '\\';
 
-        private XmlDocument xmlDocument;
-        private XmlNode itemNode;
 
         // these are the <Item>platform>/dlcPacks/whatever/</Item> entries
         // I don't think they change so there's no reason not to hard code them
-        private string[] platforms = new string[]
+        private readonly string[] platforms = new string[]
         {
             "mpBeach", "mpBusiness", "mpChristmas", "mpValentines", "mpBusiness2", "mpHipster", "mpIndependence", "mpPilot", "spUpgrade", "mpLTS"
         };
@@ -40,6 +36,9 @@ namespace DLCListEditor
         public MainWindow()
         {
             InitializeComponent();
+
+            string defaultInstallLocation = "C:\\Program Files (x86)\\Steam\\SteamApps\\common\\Grand Theft Auto V\\";
+
             // disable saving from the start
             CanUserSave(false);
             OpenFromRpfItem.IsEnabled = false;
@@ -163,6 +162,8 @@ namespace DLCListEditor
         private void OpenDLCListItem_Click(object sender, RoutedEventArgs e)
         {
             string filename;
+            XmlDocument xmlDocument = new XmlDocument();
+            char dirSplit = '\\';
 
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -192,7 +193,6 @@ namespace DLCListEditor
                 }
 
                 // now the actual XML work begins
-                xmlDocument = new XmlDocument();
                 xmlDocument.Load(filename);
 
                 // but let's check if it's even a good dlclist.xml
@@ -250,6 +250,9 @@ namespace DLCListEditor
 
         private void NewDLCListItem_Click(object sender, RoutedEventArgs e)
         {
+            XmlDocument xmlDocument;
+            XmlNode itemNode;
+
             if (isProcessed)
             {
                 // do the stuff
