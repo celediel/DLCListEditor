@@ -241,7 +241,7 @@ namespace DLCListEditor
 
         private void NewDLCListItem_Click(object sender, RoutedEventArgs e)
         {
-            XmlDocument xmlDocument;
+            XmlDocument xmlDocument= new XmlDocument();
             XmlNode itemNode;
 
             // these are the <Item>platform>/dlcPacks/whatever/</Item> entries
@@ -264,7 +264,6 @@ namespace DLCListEditor
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     filename = saveFileDialog.FileName;
-                    xmlDocument = new XmlDocument();
                     XmlDeclaration xmlDeclaration = xmlDocument.CreateXmlDeclaration("1.0", "UTF-8", null);
 
                     XmlNode smpdNode = xmlDocument.CreateElement("SMandatoryPacksData");
@@ -298,6 +297,8 @@ namespace DLCListEditor
             }
             else
             {
+                // theoretically we shouldn't ever get here because the button will be disabled
+                // so maybe I should remove the whole if/else statement...
                 MessageBox.Show("Select the GTA5 first probably");
             }
         }

@@ -40,7 +40,19 @@
         </Menu>
         <!-- Actual data grid -->
         <DataGrid x:Name="dlcGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserReorderColumns="False" GridLinesVisibility="None"
-                  RowBackground="White" AlternatingRowBackground="GhostWhite">
+                  RowBackground="White" AlternatingRowBackground="GhostWhite" SelectionMode="Single">
+            <!-- Generic Cell Styles -->
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Azure"/>
+                            <Setter Property="Foreground" Value="DarkSlateGray" />
+                            <Setter Property="BorderBrush" Value="AliceBlue" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style> 
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="nameColumn" Header="DLC Pack Name" IsReadOnly="True" Binding="{Binding ModName}" />
                 <!-- This is the vanilla directory column -->
@@ -54,6 +66,10 @@
                                 <DataTrigger Binding="{Binding Path=InVanillaDirYesNo}" Value="No">
                                     <Setter Property="Background" Value="PeachPuff" />
                                 </DataTrigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="DarkSlateGray" />
+                                    <Setter Property="BorderBrush" Value="AliceBlue" />
+                                </Trigger>
                             </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
@@ -74,6 +90,10 @@
                                 <DataTrigger Binding="{Binding Path=InModsDirYesNo}" Value="No">
                                     <Setter Property="Background" Value="PeachPuff" />
                                 </DataTrigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="DarkSlateGray" />
+                                    <Setter Property="BorderBrush" Value="AliceBlue" />
+                                </Trigger>
                             </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
