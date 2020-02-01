@@ -40,7 +40,7 @@
         </Menu>
         <!-- Actual data grid -->
         <DataGrid x:Name="dlcGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserReorderColumns="False" GridLinesVisibility="None"
-                  RowBackground="White" AlternatingRowBackground="GhostWhite" SelectionMode="Single">
+                  RowBackground="White" AlternatingRowBackground="GhostWhite" SelectionMode="Single" CanUserResizeRows="False" RowHeaderWidth="0">
             <!-- Generic Cell Styles -->
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
