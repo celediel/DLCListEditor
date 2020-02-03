@@ -21,19 +21,24 @@
         <!-- Menu bar -->
         <Menu x:Name="TopMenu" Grid.Row="0" Margin="0">
             <MenuItem Header="_File">
-                <MenuItem x:Name="SelectFolderMenuItem" Header="Select GTA V Folder" Click="SelectFolderMenuItem_Click" />
+                <MenuItem x:Name="SelectFolderMenuItem" Header="Select GTA V Folder" Click="SelectFolderMenuItem_Click" InputGestureText="Ctrl+G" />
                 <Separator />
-                <MenuItem x:Name="NewDLCListItem" Header="Save to new XML Document" Click="NewDLCListItem_Click" />
-                <MenuItem x:Name="OpenDLCListItem" Header="Open existing XML Document" Click="OpenDLCListItem_Click" />
+                <MenuItem x:Name="NewDLCListMenuItem" Header="Save to new XML Document" Click="NewDLCListMenuItem_Click" InputGestureText="Ctrl+S" />
+                <MenuItem x:Name="OpenDLCListMenuItem" Header="Open existing XML Document" Click="OpenDLCListMenuItem_Click" InputGestureText="Ctrl+O" />
                 <Separator />
+                <!--
                 <MenuItem x:Name="SaveToRpfITem" Header="Save dlclist.xml to RPF" Click="SaveToRpfITem_Click" />
                 <MenuItem x:Name="OpenFromRpfItem" Header="Open dlclist.xml from RPF" Click="OpenFromRpfItem_Click" />
                 <Separator />
-                <MenuItem x:Name="ClearMenuItem" Header="Clear Current List" Click="ClearMenuItem_Click" />
-                <MenuItem x:Name="CloseMenuItem" Header="Quit" Click="CloseMenuItem_Click" />
+                -->
+                <MenuItem x:Name="ClearMenuItem" Header="Clear Current List" Click="ClearMenuItem_Click" InputGestureText="Ctrl+C"/>
+                <Separator />
+                <MenuItem x:Name="CloseMenuItem" Header="Quit" Click="CloseMenuItem_Click" InputGestureText="Ctrl+Q" />
+            </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem x:Name="SaveToConfigMenuItem" Header="Automatically save directory to config.ini?" IsCheckable="True" IsChecked="True" Click="SaveToConfigMenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="_Help">
-                <!--<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://gitlab.com/celediel/dlclisteditor/blob/master/README.md">View README</Hyperlink>-->
                 <MenuItem x:Name="ReadmeMenuItem" Header="View ReadMe" Click="ReadmeMenuItem_Click" />
                 <MenuItem x:Name="AboutMenuItem" Header="About" Click="AboutMenuItem_Click" />
             </MenuItem>

@@ -24,7 +24,8 @@ It's also possible to open and save existing XML files without loading your GTA5
 
 ## TODO ##
 
-* Open from and write to update.rpf
+* ~~Open from and write to update.rpf~~ As far as I can tell, CodeWalkers' implementation of RPF file loading
+depends on WinForms (seriously?), and I'm using WPF for this program, so I'm putting this feature on hold for now :(
 * Anything else I think of that I want to do
 
 ## Changelog ##
@@ -32,3 +33,5 @@ It's also possible to open and save existing XML files without loading your GTA5
 * `1.0` - Initial release
 * `1.01` - Added ReadMe redirection
 * `1.02` - Added a status bar and some tooltips
+* `1.1` - Added a config.ini that for now only contains one option, under `[Paths]`, `GTA5 = C:\Path\To\GTA5`.
+In addition, `Help -> View Readme` now actually displays the readme in a window instead of launching a browser to gitlab.
