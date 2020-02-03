@@ -35,3 +35,9 @@ depends on WinForms (seriously?), and I'm using WPF for this program, so I'm put
 * `1.02` - Added a status bar and some tooltips
 * `1.1` - Added a config.ini that for now only contains one option, under `[Paths]`, `GTA5 = C:\Path\To\GTA5`.
 In addition, `Help -> View Readme` now actually displays the readme in a window instead of launching a browser to gitlab.
+
+## Credits ##
+* rickyah's ini-parser - https://github.com/rickyah/ini-parser
+* Kryptos-FR's Markdig-WPF for Markdown to WPF used for displaying readme - https://github.com/Kryptos-FR/markdig.wpf
+* Nate Shoffner & Evan Wondrasek / Apricity Software LLC for WPFCustomMessageBox - https://github.com/NateShoffner/WPFCustomMessageBox
+
