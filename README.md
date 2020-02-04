@@ -4,9 +4,8 @@ Simple GUI to generate/edit Grand Theft Auto 5's dlclist.xml files.
 
 ## Instructions ##
 
-If you have GTA5 on Steam, installed in the default location, `C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\`,
-the program will automatically read your mods, `mods\update\x64\dlcpacks` and vanilla, `update\x64\dlcpacks`
-dlcpack folders. Otherwise, select `File -> Select GTA5 Folder` and browse for your `GTA5.exe`.
+Select `File -> Select GTA5 Folder` and browse for your `GTA5.exe`, the program will automatically read your mods, `mods\update\x64\dlcpacks` and vanilla, `update\x64\dlcpacks`
+dlcpack folders. 
 
 This will populate the screen with all the dlcpacks you have installed, and will display whether they're located
 in the vanilla folder, mods folder, or both. The fourth column allows you to choose whether the selected dlcpack
