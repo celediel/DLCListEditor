@@ -18,7 +18,10 @@ namespace DLCListEditor
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Viewer.Markdown = File.ReadAllText("README.md");
+            if (File.Exists("README.md"))
+                Viewer.Markdown = File.ReadAllText("README.md");
+            else
+                Viewer.Markdown = "### WHY'D YOU DELETE THE README?";
         }
 
         private void OpenHyperlink(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)

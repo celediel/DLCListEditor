@@ -22,6 +22,17 @@ If you make some unwanted changes, or load a funky XML file, or just want to sta
 
 It's also possible to open and save existing XML files without loading your GTA5 install.
 
+## Options / Config ##
+
+There now exists a `config.ini` that currently contains only one option:
+
+    [Paths]
+    GTA5 = C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\
+
+If it doesn't exist, it'll be created the first time a directory is selected, if
+`Options -> Automatically save directory to config.ini?` is checked, so don't worry about manually
+creating the file.
+
 ## TODO ##
 
 * ~~Open from and write to update.rpf~~ As far as I can tell, CodeWalkers' implementation of RPF file loading
