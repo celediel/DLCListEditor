@@ -38,8 +38,6 @@ namespace DLCListEditor
         {
             InitializeComponent();
 
-            //string defaultInstallLocation = "C:\\Program Files (x86)\\Steam\\SteamApps\\common\\Grand Theft Auto V\\";
-
             // disable saving from the start
             CanUserSave(false);
             //OpenFromRpfItem.IsEnabled = false;
@@ -49,13 +47,6 @@ namespace DLCListEditor
             statusBarGtavDirToolTip.Text = "GTAV directory not selected";
             statusBarLoadedXml.Text = "";
             statusBarLoadedXmlToolTip.Text = "No parsed XML file yet";
-
-            // if the default Steam install directory exists, we'll use it
-            //if (Directory.Exists(defaultInstallLocation))
-            //{
-            //    gta5executable = defaultInstallLocation + "GTA5.exe";
-            //    ProcessGTAV(gta5executable);
-            //}
 
             // Parse INI file
             loadedIni = LoadINI();
@@ -433,7 +424,6 @@ namespace DLCListEditor
 
         private void ReadmeMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //Process.Start("https://gitlab.com/celediel/dlclisteditor/blob/master/README.md");
             ReadMeWindow readMeWindow = new ReadMeWindow();
             readMeWindow.Show();
         }
