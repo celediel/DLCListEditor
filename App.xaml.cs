@@ -8,10 +8,10 @@ namespace DLCListEditor
     /// </summary>
     public partial class App : Application
     {
-        public static double VERSION = 1.10;
+        public static double VERSION = 1.11;
         public static string AUTHOR = "celediel";
         public static string EMAIL = "celediel813@gmail.com";
         public static Uri EMAILINK = new Uri($"mailto:{EMAIL}");
-        public static Uri SOURCE = new Uri("https://gitlab.com/celediel/dlclisteditor");
+        public static Uri SOURCE = new Uri("https://github.com/lilyseki/DLCListEditor");
     }
 }
