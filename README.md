@@ -45,6 +45,8 @@ depends on WinForms (seriously?), and I'm using WPF for this program, so I'm put
 * `1.02` - Added a status bar and some tooltips
 * `1.1` - Added a config.ini that for now only contains one option, under `[Paths]`, `GTA5 = C:\Path\To\GTA5`.
 In addition, `Help -> View Readme` now actually displays the readme in a window instead of launching a browser to gitlab.
+* `1.11` - Migrated to Github, also added a "proper" icon so it doesen't look super janky.
+Also some minor code refactoring and other nonsense.
 
 ## Credits ##
 * rickyah's ini-parser - https://github.com/rickyah/ini-parser

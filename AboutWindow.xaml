@@ -10,8 +10,8 @@
         Title="About this Application" Height="115" Width="385">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="13"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="13" />
         </Grid.RowDefinitions>
         <StackPanel Margin="10" TextBlock.TextAlignment="Center" VerticalAlignment="Center" Grid.Row="0">
             <TextBlock>
@@ -29,6 +29,14 @@
                 <Hyperlink Click="Hyperlink_Click">Learn more</Hyperlink>.
             </TextBlock>
         </StackPanel>
-        <TextBlock Grid.Row="1" x:Name="versionText" FontSize="8" Text="v0.0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,2,0"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="SneakyButton" Click="SneakyButton_Click" Content="no" FontSize="8" Width="Auto" Height="Auto"
+                    HorizontalAlignment="Left" Margin="1,0,0,0" BorderThickness="0" />
+            <TextBlock Grid.Column="1" x:Name="versionText" FontSize="8" Text="v0.0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,2,0" />
+        </Grid>
     </Grid>
 </Window>

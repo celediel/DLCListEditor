@@ -6,6 +6,7 @@
         xmlns:markdig="clr-namespace:Markdig.Wpf;assembly=Markdig.Wpf"
         xmlns:local="clr-namespace:DLCListEditor"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
         Title="ReadMe - DLCListEditor" Height="500" Width="800">
     <FrameworkElement.CommandBindings>
         <CommandBinding Command="{x:Static markdig:Commands.Hyperlink}" Executed="OpenHyperlink" />

@@ -20,7 +20,7 @@
         public bool InVanillaDir { get; set; }
         public bool InModsDir { get; set; }
         public bool InDlcList { get; set; }
-        public string InVanillaDirYesNo { get { return InVanillaDir ? "Yes" : "No"; } }
-        public string InModsDirYesNo { get { return InModsDir ? "Yes" : "No"; } }
+        public string InVanillaDirYesNo => InVanillaDir ? "Yes" : "No";
+        public string InModsDirYesNo => InModsDir ? "Yes" : "No";
     }
 }

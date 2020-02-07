@@ -27,6 +27,8 @@ namespace DLCListEditor
         private bool isProcessed = false;
         private bool existingList = false;
 
+        Point lastPoint = new Point(0.0, 0.0);
+
         // all about the INI
         private bool loadedIni = false;
         readonly FileIniDataParser iniParser = new FileIniDataParser();
@@ -339,8 +341,7 @@ namespace DLCListEditor
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            AboutWindow aboutWindow = new AboutWindow();
-            aboutWindow.Show();
+            new AboutWindow() { Owner = this }.Show();
         }
 
         private void OpenFromRpfMenuItem_Click(object sender, RoutedEventArgs e)
@@ -424,8 +425,7 @@ namespace DLCListEditor
 
         private void ReadmeMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ReadMeWindow readMeWindow = new ReadMeWindow();
-            readMeWindow.Show();
+            new ReadMeWindow() { Owner = this }.Show();
         }
 
         private void SaveToConfigMenuItem_Click(object sender, RoutedEventArgs e)
@@ -440,6 +440,16 @@ namespace DLCListEditor
                 SaveConfig = false;
             }
             Debug.WriteLine(SaveConfig);
+        }
+
+        // I got bored and maybe a little stoned, don't ask why I left it here
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Point point = e.GetPosition((IInputElement)sender);
+            if (point.Equals(lastPoint))
+                CustomMessageBox.ShowYesNo("don't double click on me like that", "hey bud", "okay sorry", "I do what I want!");
+            Debug.WriteLine(point.ToString());
+            lastPoint = point;
         }
     }
 }
