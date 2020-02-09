@@ -1,6 +1,6 @@
 ﻿namespace DLCListEditor
 {
-    class DLCPack
+    internal class DLCPack
     {
         public DLCPack(string modName, bool inVanillaDir, bool inModsDir)
         {
@@ -16,6 +16,7 @@
             InModsDir = inModsDir;
             InDlcList = inDlcList;
         }
+
         public string ModName { get; set; }
         public bool InVanillaDir { get; set; }
         public bool InModsDir { get; set; }
