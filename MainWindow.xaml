@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLCListEditor"
-        mc:Ignorable="d"
-        Title="GTA 5 dlclist.xml Creator/Editor" Height="550" Width="430">
+        mc:Ignorable="d" Height="550" Width="430"
+        Title="GTA 5 dlclist.xml Creator/Editor">
     <Window.Resources>
         <Style x:Key="DataGridCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -15,13 +15,13 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!-- Menu bar -->
         <Menu x:Name="TopMenu" Grid.Row="0" Margin="0">
             <MenuItem Header="_File">
-                <MenuItem x:Name="SelectFolderMenuItem" Header="Select GTA V Folder" Click="SelectFolderMenuItem_Click" />
+                <MenuItem x:Name="SelectFolderMenuItem" Header="Select Game Folder" Click="SelectFolderMenuItem_Click" />
                 <Separator />
                 <MenuItem x:Name="NewDLCListMenuItem" Header="Save to new XML Document" Click="NewDLCListMenuItem_Click" />
                 <MenuItem x:Name="OpenDLCListMenuItem" Header="Open existing XML Document" Click="OpenDLCListMenuItem_Click" />
@@ -36,7 +36,7 @@
                 <MenuItem x:Name="CloseMenuItem" Header="Quit" Click="CloseMenuItem_Click" />
             </MenuItem>
             <MenuItem Header="_Options">
-                <MenuItem x:Name="SaveToConfigMenuItem" Header="Automatically save directory to config.ini?" IsCheckable="True" IsChecked="True" Click="SaveToConfigMenuItem_Click"/>
+                <MenuItem x:Name="SaveToConfigMenuItem" Header="Automatically save directory to config.ini?" IsCheckable="True" IsChecked="True" Click="SaveToConfigMenuItem_Click" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem x:Name="ReadmeMenuItem" Header="View ReadMe" Click="ReadmeMenuItem_Click" />
@@ -51,12 +51,12 @@
                 <Style TargetType="DataGridCell">
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="Azure"/>
+                            <Setter Property="Background" Value="Azure" />
                             <Setter Property="Foreground" Value="DarkSlateGray" />
                             <Setter Property="BorderBrush" Value="AliceBlue" />
                         </Trigger>
                     </Style.Triggers>
-                </Style> 
+                </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="nameColumn" Header="DLC Pack Name" IsReadOnly="True" Binding="{Binding ModName}" />

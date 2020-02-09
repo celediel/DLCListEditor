@@ -13,6 +13,6 @@
         <CommandBinding Command="{x:Static markdig:Commands.Image}" Executed="ClickOnImage" />
     </FrameworkElement.CommandBindings>
     <Grid>
-        <markdig:MarkdownViewer x:Name="Viewer"/>
+        <markdig:MarkdownViewer x:Name="Viewer" />
     </Grid>
 </Window>
