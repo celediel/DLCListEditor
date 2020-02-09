@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLCListEditor"
         mc:Ignorable="d" Height="550" Width="430"
-        Title="GTA 5 dlclist.xml Creator/Editor">
+        Title="GTA 5 / RDR 2 dlclist.xml Creator/Editor">
     <Window.Resources>
         <Style x:Key="DataGridCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
             <Setter Property="VerticalAlignment" Value="Center" />

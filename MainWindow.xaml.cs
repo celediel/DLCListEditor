@@ -10,6 +10,7 @@ using WPFCustomMessageBox;
 using IniParser;
 using IniParser.Model;
 using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace DLCListEditor
 {
@@ -19,20 +20,33 @@ namespace DLCListEditor
     public partial class MainWindow : Window
     {
         // I'm too lazy/dumb right now to make these not global
-        private string gta5executable;
-        private string gta5Directory;
+        private string gameExecutable;
+
+        private string gameDirectory;
         private string modsDirectory;
         private string vanillaDirectory;
         private Dictionary<string, DLCPack> dlcPacks;
         private bool isProcessed = false;
         private bool existingList = false;
 
-        Point lastPoint = new Point(0.0, 0.0);
+        private enum Games
+        {
+            GTA5,
+            RDR2,
+            __NOTAGAME
+        }
+
+        private Games currentGame;
+
+        private Point lastPoint = new Point(0.0, 0.0);
 
         // all about the INI
         private bool loadedIni = false;
-        readonly FileIniDataParser iniParser = new FileIniDataParser();
-        IniData iniData;
+
+        private const string LastSelectedKeyName = "Last Selected Dir";
+
+        private readonly FileIniDataParser iniParser = new FileIniDataParser();
+        private IniData iniData;
 
         public bool SaveConfig { get; set; } = true;
 
@@ -45,8 +59,8 @@ namespace DLCListEditor
             //OpenFromRpfItem.IsEnabled = false;
 
             // default status bar
-            statusBarGtavDir.Text = "GTAV directory not selected";
-            statusBarGtavDirToolTip.Text = "GTAV directory not selected";
+            statusBarGtavDir.Text = "Game directory not selected";
+            statusBarGtavDirToolTip.Text = "Game directory not selected";
             statusBarLoadedXml.Text = "";
             statusBarLoadedXmlToolTip.Text = "No parsed XML file yet";
 
@@ -59,11 +73,27 @@ namespace DLCListEditor
             if (File.Exists("config.ini"))
             {
                 iniData = iniParser.ReadFile("config.ini");
-                gta5Directory = iniData["Paths"]["GTA5"];
-                gta5executable = gta5Directory + "GTA5.exe";
-                if (File.Exists(gta5executable))
+                // backwards compatibility lmaoooooo
+                if (iniData["Paths"].ContainsKey("GTA5"))
                 {
-                    ProcessGTAV(gta5executable);
+                    gameDirectory = iniData["Paths"]["GTA5"];
+                }
+                else if (iniData["Paths"].ContainsKey(LastSelectedKeyName))
+                {
+                    gameDirectory = iniData["Paths"][LastSelectedKeyName];
+                }
+                var _game = gameDirectory.Split("\\");
+                var __game = _game[_game.Count() - 2];
+                currentGame = __game switch
+                {
+                    "Grand Theft Auto V" => Games.GTA5,
+                    "Red Dead Redemption 2" => Games.RDR2,
+                    _ => Games.__NOTAGAME
+                };
+                gameExecutable = gameDirectory + $"{currentGame}.exe";
+                if (File.Exists(gameExecutable))
+                {
+                    ProcessGame(gameExecutable);
                 }
                 return true;
             }
@@ -72,22 +102,34 @@ namespace DLCListEditor
                 return false;
             }
         }
+
         private bool SaveIni()
         {
-            iniData["Paths"]["GTA5"] = gta5Directory;
+            if (!loadedIni)
+            {
+                iniData = new IniData();
+            }
+            iniData["Paths"][LastSelectedKeyName] = gameDirectory;
+            iniData["Paths"].RemoveKey("GTA5");
             iniParser.WriteFile("config.ini", iniData);
             return true;
         }
 
-        private void ProcessGTAV(string gtavExe)
+        private void ProcessGame(string executable)
         {
             // Create a new Dict every time unless we've opened an existing list
             if (!existingList)
                 dlcPacks = new Dictionary<string, DLCPack>();
 
-            gta5Directory = gtavExe.Replace("GTA5.exe", "");
-            modsDirectory = gta5Directory + "mods\\update\\x64\\dlcpacks\\";
-            vanillaDirectory = gta5Directory + "\\update\\x64\\dlcpacks\\";
+            gameDirectory = executable.Replace($"{currentGame.ToString()}.exe", "");
+            modsDirectory = gameDirectory + "mods\\update\\x64\\dlcpacks\\";
+            //vanillaDirectory = gta5Directory + "\\update\\x64\\dlcpacks\\";
+            vanillaDirectory = currentGame switch
+            {
+                Games.GTA5 => gameDirectory + "\\update\\x64\\dlcpacks\\",
+                Games.RDR2 => gameDirectory + "\\x64\\dlcpacks\\",
+                _ => "\\x64\\dlcpacks\\"
+            };
 
             // First add all vanilla dlcpacks to the List with inModsDir = false for now
             // we'll change it later
@@ -106,7 +148,6 @@ namespace DLCListEditor
                         dlcPacks.Add(name, new DLCPack(name, true, false));
                     }
                 }
-
             }
 
             // now we'll process the mods directory
@@ -138,15 +179,15 @@ namespace DLCListEditor
             }
 
             dlcGrid.ItemsSource = dlcPacks.Values.ToList();
-            statusBarGtavDir.Text = "GTAV directory loaded";
-            statusBarGtavDirToolTip.Text = gta5Directory;
+            statusBarGtavDir.Text = $"{currentGame.ToString()} directory loaded";
+            statusBarGtavDirToolTip.Text = gameDirectory;
             // If we've made it this far, all should be well
-            if (SaveConfig && loadedIni)
+            if (SaveConfig)
             {
                 // Write path to INI
-                iniData["Paths"]["GTA5"] = gta5Directory;
-
+                loadedIni = SaveIni();
             }
+
             isProcessed = true;
             CanUserSave(true);
             //OpenFromRpfItem.IsEnabled = true;
@@ -177,13 +218,20 @@ namespace DLCListEditor
             {
                 CheckFileExists = true,
                 CheckPathExists = true,
-                Title = "Select GTA5.exe",
-                Filter = "GTA 5 Executable|GTA5.exe"
+                Title = "Select game executable",
+                Filter = "GTA 5 Executable|GTA5.exe|RDR 2 Executable|RDR2.exe"
             };
             if (openFile.ShowDialog() == true)
             {
-                gta5executable = openFile.FileName;
-                ProcessGTAV(gta5executable);
+                currentGame = openFile.FilterIndex switch
+                {
+                    1 => Games.GTA5,
+                    2 => Games.RDR2,
+                    _ => Games.__NOTAGAME
+                };
+
+                gameExecutable = openFile.FileName;
+                ProcessGame(gameExecutable);
                 if (SaveConfig)
                 {
                     // if it wasn't loaded, then it didn't exist on program startup
@@ -191,7 +239,6 @@ namespace DLCListEditor
                     {
                         iniData = new IniData();
                     }
-                    loadedIni = SaveIni();
                 }
             }
         }
@@ -216,7 +263,7 @@ namespace DLCListEditor
                 string[] wholePath;
                 if (isProcessed)
                 {
-                    // if we've already selected the GTA5 directory, set InDlcList to false for
+                    // if we've already selected the game directory, set InDlcList to false for
                     // every existing dlcpack, so we can have a clean slate to load our XML into
                     foreach (var item in dlcPacks)
                     {
@@ -312,14 +359,16 @@ namespace DLCListEditor
                 XmlNode smpdNode = xmlDocument.CreateElement("SMandatoryPacksData");
                 XmlNode pathNode = xmlDocument.CreateElement("Paths");
 
-                // Add the default platform:/ entries
-                foreach (var item in platforms)
+                if (currentGame == Games.GTA5)
                 {
-                    itemNode = xmlDocument.CreateElement("Item");
-                    itemNode.InnerText = $"platform:/dlcPacks/{item}/";
-                    pathNode.AppendChild(itemNode);
+                    // Add the default platform:/ entries
+                    foreach (var item in platforms)
+                    {
+                        itemNode = xmlDocument.CreateElement("Item");
+                        itemNode.InnerText = $"platform:/dlcPacks/{item}/";
+                        pathNode.AppendChild(itemNode);
+                    }
                 }
-
                 foreach (var item in dlcPacks.Values.ToList())
                 {
                     if (item.InDlcList)
@@ -327,7 +376,6 @@ namespace DLCListEditor
                         itemNode = xmlDocument.CreateElement("Item");
                         itemNode.InnerText = $"dlcpacks:/{item.ModName}/";
                         pathNode.AppendChild(itemNode);
-
                     }
                 }
                 smpdNode.AppendChild(pathNode);
@@ -377,8 +425,8 @@ namespace DLCListEditor
             dlcGrid.ItemsSource = dlcPacks.Values.ToList();
 
             // reset status bar
-            statusBarGtavDir.Text = "GTAV directory not selected";
-            statusBarGtavDirToolTip.Text = "GTAV directory not selected";
+            statusBarGtavDir.Text = "Game directory not selected";
+            statusBarGtavDirToolTip.Text = "Game directory not selected";
             statusBarLoadedXml.Text = "";
             statusBarLoadedXmlToolTip.Text = "No parsed XML file yet";
 
@@ -387,19 +435,20 @@ namespace DLCListEditor
             //OpenFromRpfItem.IsEnabled = false;
             CanUserSave(false);
 
-            // ask user if they want to reload GTA dir
+            // ask user if they want to reload game dir
             // TODO : only show "From config.ini" if ini is loaded
             if (isProcessed)
             {
                 if (loadedIni)
                 {
-                    MessageBoxResult result = CustomMessageBox.ShowYesNo(messageBoxText: "Reload GTA5 directory?",
+                    MessageBoxResult result = CustomMessageBox.ShowYesNoCancel(messageBoxText: "Reload game directory?",
                                                                          caption: "Alert!",
                                                                          yesButtonText: "Last Used",
-                                                                         noButtonText: "From config.ini");
+                                                                         noButtonText: "From config.ini",
+                                                                         cancelButtonText: "No");
                     if (result == MessageBoxResult.Yes)
                     {
-                        ProcessGTAV(gta5executable);
+                        ProcessGame(gameExecutable);
                     }
                     else if (result == MessageBoxResult.No)
                     {
@@ -409,12 +458,11 @@ namespace DLCListEditor
                             MessageBox.Show("Something went wrong loading the INI!");
                         }
                     }
-
                 }
                 else
                 {
-                    if (MessageBox.Show("Reload same GTA5 directory?", "Alert!", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                        ProcessGTAV(gta5executable);
+                    if (MessageBox.Show("Reload same game directory?", "Alert!", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        ProcessGame(gameExecutable);
                 }
             }
             else
@@ -431,7 +479,7 @@ namespace DLCListEditor
         private void SaveToConfigMenuItem_Click(object sender, RoutedEventArgs e)
         {
             // Apparently I'm too dumb to get binding to work
-            if (((System.Windows.Controls.MenuItem)sender).IsChecked)
+            if (((MenuItem)sender).IsChecked)
             {
                 SaveConfig = true;
             }
