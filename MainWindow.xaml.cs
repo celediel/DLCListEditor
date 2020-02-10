@@ -121,7 +121,7 @@ namespace DLCListEditor
             if (!existingList)
                 dlcPacks = new Dictionary<string, DLCPack>();
 
-            gameDirectory = executable.Replace($"{currentGame.ToString()}.exe", "");
+            gameDirectory = executable.Replace($"{currentGame}.exe", "");
             modsDirectory = gameDirectory + "mods\\update\\x64\\dlcpacks\\";
             //vanillaDirectory = gta5Directory + "\\update\\x64\\dlcpacks\\";
             vanillaDirectory = currentGame switch
@@ -179,7 +179,7 @@ namespace DLCListEditor
             }
 
             dlcGrid.ItemsSource = dlcPacks.Values.ToList();
-            statusBarGtavDir.Text = $"{currentGame.ToString()} directory loaded";
+            statusBarGtavDir.Text = $"{currentGame} directory loaded";
             statusBarGtavDirToolTip.Text = gameDirectory;
             // If we've made it this far, all should be well
             if (SaveConfig)
@@ -436,7 +436,6 @@ namespace DLCListEditor
             CanUserSave(false);
 
             // ask user if they want to reload game dir
-            // TODO : only show "From config.ini" if ini is loaded
             if (isProcessed)
             {
                 if (loadedIni)
