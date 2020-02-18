@@ -5,7 +5,7 @@ Simple GUI to generate/edit Grand Theft Auto 5's (and maybe Red Dead Redemption 
 ## Instructions ##
 
 Select `File -> Select Game Folder` and browse for your `GTA5.exe` or `RDR2.exe`,
-the program will automatically read your mods, and vanilla dlcpack folders. 
+the program will automatically read your mods, and vanilla dlcpack folders.
 
 The screen will be populated with all the dlcpacks you have installed, and will display whether they're located
 in the vanilla folder, mods folder, or both. The fourth column allows you to choose whether the selected dlcpack
@@ -49,10 +49,10 @@ In addition, `Help -> View Readme` now actually displays the readme in a window 
 * `1.11` - Migrated to Github, also added a "proper" icon so it doesen't look super janky.
 Also some minor code refactoring and other nonsense.
 * `1.2` - Getting ready for RDR 2 support. Currently correctly parses RDR2's vanilla dlcpack structure,
-and (hopefully) all hardcoded GTA5 references have been removed. 
+and (hopefully) all hardcoded GTA5 references have been removed.
 
 ## Credits ##
-* rickyah's ini-parser - https://github.com/rickyah/ini-parser
-* Kryptos-FR's Markdig-WPF for Markdown to WPF used for displaying readme - https://github.com/Kryptos-FR/markdig.wpf
-* Nate Shoffner & Evan Wondrasek / Apricity Software LLC for WPFCustomMessageBox - https://github.com/NateShoffner/WPFCustomMessageBox
 
+* rickyah's ini-parser - <https://github.com/rickyah/ini-parser>
+* Kryptos-FR's Markdig-WPF for Markdown to WPF used for displaying readme - <https://github.com/Kryptos-FR/markdig.wpf>
+* Nate Shoffner & Evan Wondrasek / Apricity Software LLC for WPFCustomMessageBox - <https://github.com/NateShoffner/WPFCustomMessageBox>
