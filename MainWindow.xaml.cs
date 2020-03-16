@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
-using System.IO;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Xml;
-using System.Diagnostics;
-using Microsoft.Win32;
-using WPFCustomMessageBox;
 using IniParser;
 using IniParser.Model;
-using System.Windows.Input;
-using System.Windows.Controls;
+using Microsoft.Win32;
+using WPFCustomMessageBox;
 
 namespace DLCListEditor
 {
@@ -33,7 +33,7 @@ namespace DLCListEditor
         {
             GTA5,
             RDR2,
-            __NOTAGAME
+            __NOTAGAME,
         }
 
         private Games currentGame;
@@ -82,7 +82,7 @@ namespace DLCListEditor
                 {
                     gameDirectory = iniData["Paths"][LastSelectedKeyName];
                 }
-                var _game = gameDirectory.Split("\\");
+                var _game = gameDirectory.Split(@"\");
                 var __game = _game[_game.Count() - 2];
                 currentGame = __game switch
                 {
@@ -122,13 +122,13 @@ namespace DLCListEditor
                 dlcPacks = new Dictionary<string, DLCPack>();
 
             gameDirectory = executable.Replace($"{currentGame}.exe", "");
-            modsDirectory = gameDirectory + "mods\\update\\x64\\dlcpacks\\";
-            //vanillaDirectory = gta5Directory + "\\update\\x64\\dlcpacks\\";
+            modsDirectory = gameDirectory + @"mods\update\x64\dlcpacks\";
+            //vanillaDirectory = gta5Directory + @"\update\x64\dlcpacks\";
             vanillaDirectory = currentGame switch
             {
-                Games.GTA5 => gameDirectory + "\\update\\x64\\dlcpacks\\",
-                Games.RDR2 => gameDirectory + "\\x64\\dlcpacks\\",
-                _ => "\\x64\\dlcpacks\\"
+                Games.GTA5 => gameDirectory + @"\update\x64\dlcpacks\",
+                Games.RDR2 => gameDirectory + @"\x64\dlcpacks\",
+                _ => @"\x64\dlcpacks\"
             };
 
             // First add all vanilla dlcpacks to the List with inModsDir = false for now
@@ -324,7 +324,7 @@ namespace DLCListEditor
 
                 MessageBox.Show($"Opened {filename}!");
                 dlcGrid.ItemsSource = dlcPacks.Values.ToList();
-                statusBarLoadedXml.Text = filename.Split('\\').Last();
+                statusBarLoadedXml.Text = filename.Split(dirSplit).Last();
                 statusBarLoadedXmlToolTip.Text = filename;
                 existingList = true;
                 CanUserSave(true);

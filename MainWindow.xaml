@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DLCListEditor"
-        mc:Ignorable="d" Height="550" Width="430"
+        mc:Ignorable="d" Height="550" SizeToContent="Width"
         Title="Yet Another dlclist.xml Creator/Editor">
     <Window.Resources>
         <Style x:Key="DataGridCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
